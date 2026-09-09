@@ -1,6 +1,6 @@
 #!/bin/sh
 # ROBOPMO public install stub — hosted at github.com/Doss-com/robopmo-install (this copy tracks
-# ROBOPMO-src/install.sh in the private repo, taken at ee4c2871; only the DEFAULT_REF line differs)
+# ROBOPMO-src/install.sh in the private repo, taken at 540b9560; identical, DEFAULT_REF=main since the 3.0 cutover on 2026-09-09)
 # so the whole install is one command with nothing installed first:
 #   curl -fsSL <PUBLIC-URL> | sh
 # Until that URL exists, the private-repo form still works and this stub is unnecessary:
@@ -116,7 +116,7 @@ fi
 # main and the caller gave no --ref, it is forwarded as `--ref` so bootstrap.sh clones and follows
 # the same branch — otherwise bootstrap would fetch from one branch and clone another. An explicit
 # --ref or ROBOPMO_BOOTSTRAP_REF wins and is never duplicated (bootstrap.sh reads both itself).
-DEFAULT_REF=codex/workspace-core   # PILOT copy: flip to main at cutover
+DEFAULT_REF=main
 ref=${ROBOPMO_BOOTSTRAP_REF:-$DEFAULT_REF}
 explicit=${ROBOPMO_BOOTSTRAP_REF:+1}
 prev=""

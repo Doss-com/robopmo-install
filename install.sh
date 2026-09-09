@@ -1,7 +1,7 @@
 #!/bin/sh
 # ROBOPMO public install stub — hosted at github.com/Doss-com/robopmo-install (this copy tracks
-# ROBOPMO-src/install.sh in the private repo, taken at ee7a193d; only the default channel line
-# differs) so the whole install is one command with nothing installed first:
+# ROBOPMO-src/install.sh in the private repo, taken at ee4c2871; only the DEFAULT_REF line differs)
+# so the whole install is one command with nothing installed first:
 #   curl -fsSL <PUBLIC-URL> | sh
 # Until that URL exists, the private-repo form still works and this stub is unnecessary:
 #   gh api repos/Doss-com/ROBOPMO/contents/ROBOPMO-src/bootstrap.sh -H "Accept: application/vnd.github.raw" | sh
@@ -111,16 +111,21 @@ if ! gh auth status >/dev/null 2>&1 </dev/null; then
 fi
 
 # --- fetch the real bootstrap and hand off, passing every argument through unchanged ----------
-# Only peeks at --ref/--ref=<b> to pick the fetch URL; bootstrap.sh re-parses the same flag from
-# "$@" itself (and honors ROBOPMO_BOOTSTRAP_REF too), so nothing here needs to rebuild argv.
-# Default channel. PILOT: the 3.0 candidate branch; flip to main at cutover (one commit here).
-ref=${ROBOPMO_BOOTSTRAP_REF:-codex/workspace-core}
+# DEFAULT_REF is the channel this stub fetches bootstrap.sh from when the caller names none: the
+# ONE line a hosted copy may change (a pilot copy points at the candidate branch). When it is not
+# main and the caller gave no --ref, it is forwarded as `--ref` so bootstrap.sh clones and follows
+# the same branch — otherwise bootstrap would fetch from one branch and clone another. An explicit
+# --ref or ROBOPMO_BOOTSTRAP_REF wins and is never duplicated (bootstrap.sh reads both itself).
+DEFAULT_REF=codex/workspace-core   # PILOT copy: flip to main at cutover
+ref=${ROBOPMO_BOOTSTRAP_REF:-$DEFAULT_REF}
+explicit=${ROBOPMO_BOOTSTRAP_REF:+1}
 prev=""
 for a in "$@"; do
-  case $prev in --ref) ref=$a ;; esac
-  case $a in --ref=*) ref=${a#--ref=} ;; esac
+  case $prev in --ref) ref=$a; explicit=1 ;; esac
+  case $a in --ref=*) ref=${a#--ref=}; explicit=1 ;; esac
   prev=$a
 done
+if [ -z "$explicit" ] && [ "$ref" != main ]; then set -- --ref "$ref" "$@"; fi
 # On success, leaves the fetched script's path in $script and returns 0. On failure, leaves gh's
 # own error text in $fetch_err (for the caller to read the reason) and returns nonzero.
 fetch_bootstrap() {

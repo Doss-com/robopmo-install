@@ -1,9 +1,9 @@
 #!/bin/sh
-# ROBOPMO public install stub — hosted at github.com/Doss-com/robopmo-install (this copy tracks
-# ROBOPMO-src/install.sh in the private repo, taken at 540b9560; identical, DEFAULT_REF=main since the 3.0 cutover on 2026-09-09)
-# so the whole install is one command with nothing installed first:
-#   curl -fsSL <PUBLIC-URL> | sh
-# Until that URL exists, the private-repo form still works and this stub is unnecessary:
+# ROBOPMO public install stub — hosted as a byte-for-byte copy in the public repository
+# Doss-com/robopmo-install (main), so the whole install is one command with nothing installed first:
+#   curl -fsSL https://raw.githubusercontent.com/Doss-com/robopmo-install/main/install.sh | sh
+# This file is the source; a change here is republished there by a maintainer (docs/RELEASING.md).
+# The private-repo form still works when `gh` is already signed in, and skips this stub entirely:
 #   gh api repos/Doss-com/ROBOPMO/contents/ROBOPMO-src/bootstrap.sh -H "Accept: application/vnd.github.raw" | sh
 # bootstrap.sh remains the source of truth for everything after this. This stub does ONLY:
 # refuse an unsupported OS, require curl, install gh if missing (byte-identical copy of
